@@ -25,3 +25,4 @@ if st.button("Recommend"):
 
     for item in recommendations['productId']:
         st.write(item)
+    st.write(df.columns.tolist())
