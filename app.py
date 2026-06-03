@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 
+# Load dataset
+df = pd.read_csv("ratings.csv")  
+
 # Title
 st.title("Product Recommendation System")
 st.write("Get product recommendations")
