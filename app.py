@@ -5,8 +5,12 @@ import pandas as pd
 st.title("Product Recommendation System")
 st.write("Get product recommendations based on product ID")
 
-# Load dataset
-df = pd.read_csv("ratings.csv")  
+# Load dataset with explicit column names
+df = pd.read_csv(
+    "ratings.csv",
+    header=None,
+    names=["userId", "productId", "Rating", "timestamp"]
+)
 
 # Product input
 product_id = st.selectbox(
@@ -25,4 +29,3 @@ if st.button("Recommend"):
 
     for item in recommendations['productId']:
         st.write(item)
-    st.write(df.columns.tolist())
