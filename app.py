@@ -1,27 +1,23 @@
 ## Create app.py
-
-%%writefile app.py
-
 import streamlit as st
 import pandas as pd
-import pickle
 
 # Title
 st.title("Product Recommendation System")
-st.write("Get product recommendations based on product ID")
+
+st.write("Get product recommendations")
 
 # Load dataset
-df = pd.read_csv("ratings.csv")   
+df = pd.read_csv("amazon.csv")  # change filename if needed
 
-# Product input
+# Product selection
 product_name = st.selectbox(
     "Select Product",
     df['product_name'].unique()
 )
 
-# Recommendation Button
+# Recommendation button
 if st.button("Recommend"):
-
     recommendations = df[
         df['product_name'] != product_name
     ].sample(5)
@@ -30,4 +26,3 @@ if st.button("Recommend"):
 
     for item in recommendations['product_name']:
         st.write(item)
-
