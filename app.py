@@ -4,11 +4,10 @@ import pandas as pd
 
 # Title
 st.title("Product Recommendation System")
-
 st.write("Get product recommendations")
 
 # Load dataset
-df = pd.read_csv("amazon.csv")  # change filename if needed
+df = pd.read_csv("ratings.csv")  # change filename if needed
 
 # Product selection
 product_name = st.selectbox(
