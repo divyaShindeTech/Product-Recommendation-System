@@ -8,7 +8,11 @@ st.write("Get product recommendations based on Product ID")
 # Load dataset
 @st.cache_data
 def load_data():
-    df = pd.read_csv("ratings.csv")
+    df = pd.read_csv(
+        "ratings.csv",
+        header=None,
+        names=["userId", "productId", "Rating", "timestamp"]
+    )
     df.columns = df.columns.str.strip()
     return df
 
