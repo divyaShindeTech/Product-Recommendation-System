@@ -10,7 +10,7 @@ df = pd.read_csv("ratings.csv")
 
 # Product input
 product_id = st.selectbox(
-    "Select Product ID",
+    "Select Product Id",
     df['productId'].unique()
 )
 
