@@ -11,19 +11,19 @@ st.write("Get product recommendations")
 # Product selection
 product_name = st.selectbox(
     "Select Product",
-    df['product_name'].unique()
+   df['productId'].unique()
 )
 # Recommendation button
 if st.button("Recommend"):
 
     recommendations = df[
-        df['product_name'] != product_name
+        df['productId'] != 'productId'
     ].sample(5)
 
     st.subheader("Recommended Products")
 
-    for item in recommendations['product_name']:
+    for item in recommendations['productId'']:
         st.write(item)
 
-    for item in recommendations['product_name']:
+    for item in recommendations['productId']:
         st.write(item)
