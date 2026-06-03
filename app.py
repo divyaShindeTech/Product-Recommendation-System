@@ -22,7 +22,7 @@ if st.button("Recommend"):
 
     st.subheader("Recommended Products")
 
-    for item in recommendations['productId'']:
+    for item in recommendations['productId']:
         st.write(item)
 
     for item in recommendations['productId']:
