@@ -8,7 +8,6 @@ import pickle
 
 # Title
 st.title("Product Recommendation System")
-
 st.write("Get product recommendations based on product ID")
 
 # Load dataset
@@ -31,6 +30,4 @@ if st.button("Recommend"):
 
     for item in recommendations['product_name']:
         st.write(item)
-
-
 
