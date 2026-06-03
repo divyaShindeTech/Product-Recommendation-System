@@ -16,7 +16,7 @@ def load_data():
     )
     df.columns = df.columns.str.strip()
     return df
-
+    
 df = load_data()
 
 # Product selection
