@@ -1,31 +1,37 @@
 import streamlit as st
 import pandas as pd
 
-# Title
+# Page title
 st.title("Product Recommendation System")
-st.write("Get product recommendations based on product ID")
+st.write("Get product recommendations based on Product ID")
 
-# Load dataset with explicit column names
-df = pd.read_csv(
-    "ratings.csv",
-    header=None,
-    names=["userId", "productId", "Rating", "timestamp"]
-)
+# Load dataset
+@st.cache_data
+def load_data():
+    df = pd.read_csv("ratings.csv")
+    df.columns = df.columns.str.strip()
+    return df
 
-# Product input
+df = load_data()
+
+# Product selection
 product_id = st.selectbox(
     "Select Product Id",
-    df['productId'].unique()
+    df["productId"].unique()
 )
 
-# Recommendation Button
+# Recommendation button
 if st.button("Recommend"):
 
+    # Filter products excluding selected one
     recommendations = df[
-        df['productId'] != product_id
-    ].sample(5)
+        df["productId"] != product_id
+    ]["productId"].drop_duplicates().sample(
+        min(5, len(df))
+    )
 
     st.subheader("Recommended Products")
 
-    for item in recommendations['productId']:
+    # Show recommendations
+    for item in recommendations:
         st.write(item)
