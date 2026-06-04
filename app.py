@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import pickle
 import gzip
-
+import matplotlib.pyplot as plt
 
 # PAGE CONFIG
 st.set_page_config(
