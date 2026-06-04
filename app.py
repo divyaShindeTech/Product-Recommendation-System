@@ -74,20 +74,14 @@ elif page == "EDA & Product Analysis":
     • rating → Product rating given by user
     • timestamp → Time when rating was submitted
     """)
+
+    # Top 10 Most Rated Products
     st.subheader("Top 10 Most Rated Products")
     top_products = (
         df.groupby("productId")
         .size()
         .sort_values(ascending=False)
         .head(10)
-    )
-    st.subheader("Rating Distribution")
-       st.subheader("Top 10 Most Rated Products")
-    top_products = (
-        df.groupby("productId")
-          .size()
-          .sort_values(ascending=False)
-          .head(10)
     )
     fig, ax = plt.subplots(figsize=(8,4))
     top_products.plot(kind="bar", ax=ax)
