@@ -3,12 +3,10 @@ import pandas as pd
 import pickle
 
 
-
 # PAGE CONFIG
 
 st.set_page_config(
     page_title="Product Recommendation System",
-    page_icon="🛒",
     layout="wide"
 )
 
@@ -18,28 +16,19 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-.main {
-    background-color: #0E1117;
-    color: white;
-}
-
-h1,h2,h3,h4,h5,h6 {
-    color: white;
-}
-
-.metric-card{
-    background-color:#1E293B;
-    padding:15px;
-    border-radius:10px;
-    text-align:center;
-}
-
-.success-box{
-    background-color:#16A34A;
-    padding:15px;
-    border-radius:10px;
+.stApp{
+    background-color:#0E1117;
     color:white;
-    font-weight:bold;
+}
+
+h1,h2,h3{
+    color:white;
+}
+
+div[data-testid="stMetric"]{
+    background-color:#1E293B;
+    padding:10px;
+    border-radius:10px;
 }
 
 .stButton>button{
@@ -50,12 +39,36 @@ h1,h2,h3,h4,h5,h6 {
     padding:10px 20px;
 }
 
-.stButton>button:hover{
-    background-color:#7E22CE;
-}
-
 </style>
 """, unsafe_allow_html=True)
+
+# LOAD DATA
+
+@st.cache_data
+def load_data():
+    df = pd.read_csv(
+        "ratings.csv",
+        header=None,
+        names=["userId","productId","rating","timestamp"]
+    )
+    return df
+
+df = load_data()
+
+
+# LOAD MODEL FILES
+
+@st.cache_resource
+def load_model():
+    with open("product_similarity.pkl","rb") as f:
+        similarity = pickle.load(f)
+
+    with open("product_ids.pkl","rb") as f:
+        product_ids = pickle.load(f)
+
+    return similarity, product_ids
+
+similarity, product_ids = load_model()
 
 
 # SIDEBAR
@@ -63,12 +76,8 @@ h1,h2,h3,h4,h5,h6 {
 st.sidebar.title("🧭 Navigation")
 
 page = st.sidebar.radio(
-    "Go to",
-    [
-        "Overview",
-        "Dataset Analysis",
-        "Recommendation System"
-    ]
+    "Go To",
+    ["Overview","Get Recommendations"]
 )
 
 
@@ -76,73 +85,22 @@ page = st.sidebar.radio(
 
 if page == "Overview":
 
-    st.title("🛒 Product Recommendation System")
+    st.title(" Product Recommendation System")
 
-    st.markdown("""
-    ### Project Overview
-
-    This project recommends products using:
-
-    - Item-Item Collaborative Filtering
-    - Cosine Similarity
-    - Product Similarity Matrix
-
-    Users select a product and the model returns
-    similar products based on customer behavior.
-    """)
-
-    col1,col2,col3,col4 = st.columns(4)
-
-    with col1:
-        st.metric("Users", "1,540")
-
-    with col2:
-        st.metric("Products", "5,689")
-
-    with col3:
-        st.metric("Ratings", "65,290")
-
-    with col4:
-        st.metric("Model", "Cosine")
-
-
-# DATASET PAGE
-
-elif page == "Dataset Analysis":
-
-    st.title("📊 Dataset Analysis")
+    st.write(
+        "This system recommends similar products using Item-Item Collaborative Filtering and Cosine Similarity."
+    )
 
     col1,col2,col3 = st.columns(3)
 
-    with col1:
-        st.info("Total Users\n\n1540")
-
-    with col2:
-        st.info("Total Products\n\n5689")
-
-    with col3:
-        st.info("Total Ratings\n\n65290")
-
-    st.subheader("Dataset Information")
-
-    data = {
-        "Feature":
-        ["userId","productId","rating"],
-
-        "Description":
-        [
-            "Unique User",
-            "Unique Product",
-            "User Rating"
-        ]
-    }
-
-    st.table(pd.DataFrame(data))
+    col1.metric("Users", df["userId"].nunique())
+    col2.metric("Products", df["productId"].nunique())
+    col3.metric("Ratings", len(df))
 
 
 # RECOMMENDATION PAGE
 
-elif page == "Recommendation System":
+if page == "Get Recommendations":
 
     st.title("🎯 Product Recommendation Dashboard")
 
@@ -151,84 +109,78 @@ elif page == "Recommendation System":
     |---------|------------|------------|
     | 1 | Product Selection | Select Product |
     | 2 | Cosine Similarity | Find Similar Products |
-    | 3 | Recommendation Engine | Return Top Products |
+    | 3 | Recommendation Engine | Generate Recommendations |
     """)
 
-    st.divider()
-
-    
-    # LOAD FILES
-
-    try:
-
-        with open("product_similarity.pkl","rb") as f:
-            similarity = pickle.load(f)
-
-        with open("product_ids.pkl","rb") as f:
-            product_ids = pickle.load(f)
-
-    except:
-
-        similarity = None
-        product_ids = [
-            "0439886341",
-            "0132793040",
-            "B0007UPMJ2",
-            "B0037SRV5E",
-            "B000IJY8DS",
-            "B00181505K"
-        ]
-
     selected_product = st.selectbox(
-        "Select Product",
+        "Select Product ID",
         product_ids
     )
 
     top_n = st.slider(
         "Number of Recommendations",
-        1,
-        10,
-        5
+        min_value=1,
+        max_value=10,
+        value=5
     )
 
     if st.button("🚀 Generate Recommendations"):
 
-        st.success(
-            "Stage 1 — Product Selected Successfully"
-        )
+        try:
 
-        st.success(
-            "Stage 2 — Similar Products Retrieved"
-        )
+            idx = product_ids.index(selected_product)
 
-        st.success(
-            f"Stage 3 — Top {top_n} Recommendations Generated"
-        )
+            similarity_scores = list(
+                enumerate(similarity[idx])
+            )
 
-        st.subheader("🏆 Final Recommendations")
+            similarity_scores = sorted(
+                similarity_scores,
+                key=lambda x: x[1],
+                reverse=True
+            )
 
-        recommendations = [
-            "0132793040",
-            "B0007UPMJ2",
-            "B0037SRV5E",
-            "B000IJY8DS",
-            "B00181505K"
-        ]
+            similarity_scores = similarity_scores[1:top_n+1]
 
-        cols = st.columns(5)
+            recommendations = [
+                product_ids[i[0]]
+                for i in similarity_scores
+            ]
 
-        for i, product in enumerate(recommendations[:top_n]):
+            st.success(
+                "Stage 1 — Product Selected Successfully"
+            )
 
-            with cols[i % 5]:
+            st.success(
+                "Stage 2 — Similar Products Retrieved"
+            )
 
-                st.markdown(f"""
-                <div style="
-                background:#1E293B;
-                padding:15px;
-                border-radius:10px;
-                text-align:center;
-                ">
-                <h4>📦 Product</h4>
-                <p>{product}</p>
-                </div>
-                """, unsafe_allow_html=True)
+            st.success(
+                f"Stage 3 — Top {top_n} Recommendations Generated"
+            )
+
+            st.subheader(
+                "🏆 Recommended Products"
+            )
+
+            for i, product in enumerate(
+                recommendations,
+                start=1
+            ):
+
+                st.markdown(
+                    f"""
+                    <div style="
+                    background:#1E293B;
+                    padding:15px;
+                    margin-bottom:10px;
+                    border-radius:10px;
+                    ">
+                    <b>{i}. {product}</b>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+        except Exception as e:
+            st.error(f"Error: {e}")
