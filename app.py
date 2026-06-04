@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import pickle
+import gzip
 
 
 # PAGE CONFIG
@@ -60,7 +61,7 @@ df = load_data()
 
 @st.cache_resource
 def load_model():
-    with open("product_similarity.pkl","rb") as f:
+    with gzip.open("product_similarity.pkl.gz","rb") as f:
         similarity = pickle.load(f)
 
     with open("product_ids.pkl","rb") as f:
