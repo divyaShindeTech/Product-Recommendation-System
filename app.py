@@ -211,7 +211,6 @@ elif page == "Cluster-Aware Pipeline":
     st.title("⚙️ Cluster-Aware Pipeline")
     st.markdown("""
     ### Recommendation Flow
-
     Ratings Dataset
     ↓
     Data Cleaning
