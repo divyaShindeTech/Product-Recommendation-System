@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import pickle
 import gzip
+import matplotlib.pyplot as plt
 
 # PAGE CONFIG
 st.set_page_config(
@@ -47,7 +48,7 @@ page = st.sidebar.radio(
 
 # OVERVIEW PAGE
 if page == "Overview":
-    st.title("🛒 Product Recommendation System")
+    st.title("Product Recommendation System")
     st.write("""
     This project recommends products using
     Item-Item Collaborative Filtering and
@@ -61,6 +62,30 @@ if page == "Overview":
 
 # EDA
 elif page == "EDA & Product Analysis":
+        st.subheader("Top 10 Most Rated Products")
+    top_products = (
+        df.groupby("productId")
+          .size()
+          .sort_values(ascending=False)
+          .head(10)
+    )
+    fig, ax = plt.subplots(figsize=(8,4))
+    top_products.plot(kind="bar", ax=ax)
+    ax.set_xlabel("Product ID")
+    ax.set_ylabel("Number of Ratings")
+    st.pyplot(fig)
+
+    # Rating Distribution Graph
+    st.subheader("Rating Distribution")
+    fig, ax = plt.subplots(figsize=(6,4))
+    df["rating"].hist(
+        bins=5,
+        ax=ax
+    )
+    ax.set_xlabel("Rating")
+    ax.set_ylabel("Frequency")
+    st.pyplot(fig)
+
     st.title("📊 EDA & Product Analysis")
     col1, col2, col3 = st.columns(3)
     col1.metric("Total Users", df["userId"].nunique())
@@ -80,21 +105,7 @@ elif page == "EDA & Product Analysis":
         .sort_values(ascending=False)
         .head(10)
     )
-    # import matplotlib.pyplot as plt
-    # fig, ax = plt.subplots(figsize=(8,4))
-    # top_products.plot(kind="bar", ax=ax)
-    # ax.set_xlabel("Product ID")
-    # ax.set_ylabel("Number of Ratings")
-    # st.pyplot(fig)
     st.subheader("Rating Distribution")
-    # fig2, ax2 = plt.subplots(figsize=(6,4))
-    # df["rating"].hist(
-    #     bins=5,
-    #     ax=ax2
-    # )
-    # ax2.set_xlabel("Rating")
-    # ax2.set_ylabel("Frequency")
-    # st.pyplot(fig2)
 
 # CLUSTERING PAGE
 elif page == "Clustering Analysis":
