@@ -62,7 +62,27 @@ if page == "Overview":
 
 # EDA
 elif page == "EDA & Product Analysis":
+    st.title("📊 EDA & Product Analysis")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Users", df["userId"].nunique())
+    col2.metric("Total Products", df["productId"].nunique())
+    col3.metric("Total Ratings", len(df))
+    st.subheader("Dataset Description")
+    st.write("""
+    • userId → Unique customer identifier
+    • productId → Unique product identifier
+    • rating → Product rating given by user
+    • timestamp → Time when rating was submitted
+    """)
     st.subheader("Top 10 Most Rated Products")
+    top_products = (
+        df.groupby("productId")
+        .size()
+        .sort_values(ascending=False)
+        .head(10)
+    )
+    st.subheader("Rating Distribution")
+       st.subheader("Top 10 Most Rated Products")
     top_products = (
         df.groupby("productId")
           .size()
@@ -85,27 +105,6 @@ elif page == "EDA & Product Analysis":
     ax.set_xlabel("Rating")
     ax.set_ylabel("Frequency")
     st.pyplot(fig)
-
-    st.title("📊 EDA & Product Analysis")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Total Users", df["userId"].nunique())
-    col2.metric("Total Products", df["productId"].nunique())
-    col3.metric("Total Ratings", len(df))
-    st.subheader("Dataset Description")
-    st.write("""
-    • userId → Unique customer identifier
-    • productId → Unique product identifier
-    • rating → Product rating given by user
-    • timestamp → Time when rating was submitted
-    """)
-    st.subheader("Top 10 Most Rated Products")
-    top_products = (
-        df.groupby("productId")
-        .size()
-        .sort_values(ascending=False)
-        .head(10)
-    )
-    st.subheader("Rating Distribution")
 
 # CLUSTERING PAGE
 elif page == "Clustering Analysis":
