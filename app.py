@@ -9,32 +9,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# CUSTOM CSS
-st.markdown("""
-<style>
-
-.stApp{
-    background-color:#0E1117;
-    color:white;
-}
-h1,h2,h3{
-    color:white;
-}
-div[data-testid="stMetric"]{
-    background-color:#1E293B;
-    padding:10px;
-    border-radius:10px;
-}
-.stButton>button{
-    background-color:#9333EA;
-    color:white;
-    border:none;
-    border-radius:8px;
-    padding:10px 20px;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # LOAD DATA
 @st.cache_data
 def load_data():
@@ -85,8 +59,7 @@ if page == "Overview":
     col3.metric("Ratings", len(df))
     st.success("Deployment Status: Successfully Deployed on Streamlit Cloud")
 
-
-# EDA PAGE
+# EDA
 elif page == "EDA & Product Analysis":
     st.title("📊 EDA & Product Analysis")
     col1, col2, col3 = st.columns(3)
@@ -100,13 +73,28 @@ elif page == "EDA & Product Analysis":
     • rating → Product rating given by user
     • timestamp → Time when rating was submitted
     """)
-    st.subheader("Key Insights")
-    st.write("""
-    ✔ Large number of products available
-    ✔ User-product interactions captured
-    ✔ Sparse rating matrix observed
-    ✔ Collaborative filtering suitable for recommendation
-    """)
+    st.subheader("Top 10 Most Rated Products")
+    top_products = (
+        df.groupby("productId")
+        .size()
+        .sort_values(ascending=False)
+        .head(10)
+    )
+    # import matplotlib.pyplot as plt
+    # fig, ax = plt.subplots(figsize=(8,4))
+    # top_products.plot(kind="bar", ax=ax)
+    # ax.set_xlabel("Product ID")
+    # ax.set_ylabel("Number of Ratings")
+    # st.pyplot(fig)
+    st.subheader("Rating Distribution")
+    # fig2, ax2 = plt.subplots(figsize=(6,4))
+    # df["rating"].hist(
+    #     bins=5,
+    #     ax=ax2
+    # )
+    # ax2.set_xlabel("Rating")
+    # ax2.set_ylabel("Frequency")
+    # st.pyplot(fig2)
 
 # CLUSTERING PAGE
 elif page == "Clustering Analysis":
@@ -148,6 +136,19 @@ elif page == "Get Recommendations":
     Item-Item Collaborative Filtering
     using Cosine Similarity
     """)
+    col1, col2, col3 = st.columns(3)
+    col1.metric(
+        "Products Available",
+        len(product_ids)
+    )
+    col2.metric(
+        "Similarity Matrix Size",
+        similarity.shape[0]
+    )
+    col3.metric(
+        "Recommendation Model",
+        "Item-Item CF"
+    )
     selected_product = st.selectbox(
         "Select Product ID",
         product_ids
@@ -159,7 +160,6 @@ elif page == "Get Recommendations":
         value=5
     )
     if st.button("🚀 Generate Recommendations"):
-
         try:
             idx = product_ids.index(selected_product)
             similarity_scores = list(
@@ -181,7 +181,6 @@ elif page == "Get Recommendations":
                 f"Stage 3 → Top {top_n} Recommendations Generated"
             )
             st.subheader("🏆 Recommended Products")
-            
             for i, product in enumerate(
                 recommendations,
                 start=1
@@ -202,37 +201,37 @@ elif page == "Get Recommendations":
         except Exception as e:
             st.error(f"Error: {e}")
 
+
 # PIPELINE PAGE
 elif page == "Cluster-Aware Pipeline":
     st.title("⚙️ Cluster-Aware Pipeline")
     st.markdown("""
-    ### Step 1 : Data Collection
-    Product ratings dataset collected.
+    ### Recommendation Flow
     
-    ### Step 2 : Data Cleaning
-    Missing values handled and data prepared.
-
-    ### Step 3 : Exploratory Data Analysis
-    User and product behaviour analysed.
-
-    ### Step 4 : Clustering
-    K-Means clustering used for user segmentation.
-
-    ### Step 5 : Similarity Computation
-    Cosine similarity matrix generated.
-
-    ### Step 6 : Recommendation Engine
-    Item-Item Collaborative Filtering applied.
-
-    ### Step 7 : Deployment
-    Streamlit Cloud deployment completed.
+    Ratings Dataset
+    ↓
+    Data Cleaning
+    ↓
+    Exploratory Data Analysis
+    ↓
+    K-Means Clustering
+    ↓
+    Cosine Similarity
+    ↓
+    Item-Item Collaborative Filtering
+    ↓
+    Product Recommendations
+    ↓
+    Streamlit Deployment
     """)
     st.success("Pipeline Execution Successful")
+
 
 # FULL REPORT PAGE
 elif page == "Full Report":
     st.title("📄 Full Project Report")
     st.markdown("""
+    
     ## Project Title
     Product Recommendation System
 
@@ -242,7 +241,7 @@ elif page == "Full Report":
     product similarity.
 
     ## Dataset
-    Amazon Product Ratings Dataset
+   Product Ratings Dataset
 
     ## Techniques Used
     • Data Cleaning
@@ -263,5 +262,4 @@ elif page == "Full Report":
     • Deep Learning Based Recommenders
     • Real-Time Recommendation Engine
     """)
-
     st.success("Project Completed Successfully")
