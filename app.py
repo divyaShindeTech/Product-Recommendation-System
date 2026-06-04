@@ -62,7 +62,7 @@ if page == "Overview":
 
 # EDA
 elif page == "EDA & Product Analysis":
-        st.subheader("Top 10 Most Rated Products")
+    st.subheader("Top 10 Most Rated Products")
     top_products = (
         df.groupby("productId")
           .size()
@@ -218,7 +218,7 @@ elif page == "Cluster-Aware Pipeline":
     st.title("⚙️ Cluster-Aware Pipeline")
     st.markdown("""
     ### Recommendation Flow
-    
+
     Ratings Dataset
     ↓
     Data Cleaning
@@ -242,7 +242,7 @@ elif page == "Cluster-Aware Pipeline":
 elif page == "Full Report":
     st.title("📄 Full Project Report")
     st.markdown("""
-    
+
     ## Project Title
     Product Recommendation System
 
