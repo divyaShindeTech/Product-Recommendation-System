@@ -377,7 +377,18 @@ elif page == "Full Report":
     • K-Means Clustering
     • Cosine Similarity
     • Item-Item Collaborative Filtering
+K-Means clustering was evaluated using:
 
+• Elbow Method
+
+• Silhouette Score
+
+The optimal number of clusters was found to be K = 2.
+
+Cluster 0 represents Casual Users.
+
+Cluster 1 represents Power Users.
+""")
     ## Results
     Successfully generated personalized
     recommendations for selected products.
@@ -392,16 +403,5 @@ elif page == "Full Report":
     """)
     st.subheader("Clustering Results")
     st.write("""
-K-Means clustering was evaluated using:
 
-• Elbow Method
-
-• Silhouette Score
-
-The optimal number of clusters was found to be K = 2.
-
-Cluster 0 represents Casual Users.
-
-Cluster 1 represents Power Users.
-""")
     st.success("Project Completed Successfully")
