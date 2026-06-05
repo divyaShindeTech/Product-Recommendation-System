@@ -102,35 +102,159 @@ elif page == "EDA & Product Analysis":
 
 # CLUSTERING PAGE
 elif page == "Clustering Analysis":
+
     st.title("🔍 Clustering Analysis")
+
     st.info("""
-    Algorithm Used:
-    K-Means Clustering
+    Algorithm Used: K-Means Clustering
 
     Purpose:
     • Customer Segmentation
     • User Behaviour Analysis
     • Group Similar Users
     """)
+
+    # Metrics
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("Best K", "2")
+    col2.metric("Cluster 0 Users", "947")
+    col3.metric("Cluster 1 Users", "585")
+
+    # Elbow Method Graph
+    st.subheader("Elbow Method")
+
+    k_values = [2, 3, 4, 5, 6, 7]
+
+    inertia = [
+        1490.5,
+        1482.0,
+        1475.3,
+        1470.2,
+        1466.1,
+        1463.8
+    ]
+
+    fig, ax = plt.subplots(figsize=(8,4))
+
+    ax.plot(
+        k_values,
+        inertia,
+        marker="o"
+    )
+
+    ax.set_title("Elbow Method - KMeans")
+    ax.set_xlabel("Number of Clusters (K)")
+    ax.set_ylabel("Inertia")
+
+    st.pyplot(fig)
+
+    # Silhouette Score Graph
+    st.subheader("Silhouette Score")
+
+    silhouette_scores = [
+        0.00777,
+        0.00713,
+        0.00678,
+        0.00575,
+        0.00758,
+        0.00550
+    ]
+
+    fig2, ax2 = plt.subplots(figsize=(8,4))
+
+    ax2.plot(
+        k_values,
+        silhouette_scores,
+        marker="o"
+    )
+
+    ax2.set_title("Silhouette Score - KMeans")
+    ax2.set_xlabel("Number of Clusters (K)")
+    ax2.set_ylabel("Silhouette Score")
+
+    st.pyplot(fig2)
+
+    # Cluster Distribution
+    st.subheader("K-Means Cluster Distribution")
+
+    clusters = ["Cluster 0", "Cluster 1"]
+    users = [947, 585]
+
+    fig3, ax3 = plt.subplots(figsize=(8,5))
+
+    ax3.bar(
+        clusters,
+        users
+    )
+
+    ax3.set_title("K-Means Cluster Distribution")
+    ax3.set_xlabel("Cluster")
+    ax3.set_ylabel("Number of Users")
+
+    st.pyplot(fig3)
+
+    # Pie Chart
+    st.subheader("Cluster Percentage")
+
+    fig4, ax4 = plt.subplots(figsize=(6,6))
+
+    ax4.pie(
+        users,
+        labels=clusters,
+        autopct="%1.1f%%"
+    )
+
+    st.pyplot(fig4)
+
+    # Summary
     st.subheader("Cluster Summary")
+
     st.write("""
-    Cluster 0 → Casual Users
-    Cluster 1 → Active Users
-    Cluster 2 → Power Users
+    **Cluster 0**
+    - 947 Users
+    - Casual and Regular Users
+
+    **Cluster 1**
+    - 585 Users
+    - Highly Active Users
     """)
-    st.success("Clustering Analysis Completed Successfully")
+
+    st.success("Optimal Number of Clusters (K) = 2")
 
 # ML MODELS PAGE
+
 elif page == "ML Models":
+
     st.title("🤖 Machine Learning Models")
+
     st.markdown("""
     | Model | Purpose |
     |---------|---------|
     | K-Means Clustering | User Segmentation |
     | Cosine Similarity | Product Similarity |
-    | Item-Item Collaborative Filtering | Product Recommendation |
+    | Item-Item Collaborative Filtering | Recommendation Generation |
     """)
-    st.success("Model Training Completed Successfully")
+
+    st.subheader("Model Selection")
+
+    st.success("Best Clustering Model: K-Means (K = 2)")
+
+    st.write("""
+    **Model Details**
+
+    • K-Means Clustering:
+      Used to segment users into groups based on behaviour.
+
+    • Cosine Similarity:
+      Used to measure similarity between products.
+
+    • Item-Item Collaborative Filtering:
+      Used to recommend products similar to the selected product.
+
+    • Optimal Number of Clusters:
+      K = 2 (selected using Elbow Method and Silhouette Score).
+    """)
 
 # RECOMMENDATION PAGE
 elif page == "Get Recommendations":
@@ -211,6 +335,7 @@ elif page == "Cluster-Aware Pipeline":
     st.title("⚙️ Cluster-Aware Pipeline")
     st.markdown("""
     ### Recommendation Flow
+
     Ratings Dataset
     ↓
     Data Cleaning
@@ -265,4 +390,18 @@ elif page == "Full Report":
     • Deep Learning Based Recommenders
     • Real-Time Recommendation Engine
     """)
+    st.subheader("Clustering Results")
+    st.write("""
+K-Means clustering was evaluated using:
+
+• Elbow Method
+
+• Silhouette Score
+
+The optimal number of clusters was found to be K = 2.
+
+Cluster 0 represents Casual Users.
+
+Cluster 1 represents Power Users.
+""")
     st.success("Project Completed Successfully")
