@@ -135,7 +135,7 @@ elif page == "Clustering Analysis":
         1463.8
     ]
 
-    fig, ax = plt.subplots(figsize=(8,4))
+    fig, ax = plt.subplots(figsize=(12, 5))
 
     ax.plot(
         k_values,
@@ -161,7 +161,7 @@ elif page == "Clustering Analysis":
         0.00550
     ]
 
-    fig2, ax2 = plt.subplots(figsize=(8,4))
+    fig2, ax2 = plt.subplots(figsize=(12, 5))
 
     ax2.plot(
         k_values,
@@ -366,8 +366,7 @@ elif page == "Full Report":
     ## Objective
     Build a recommendation system that suggests
     products based on user preferences and
-    product similarity.
-
+    product similarity.n
     ## Dataset
    Product Ratings Dataset
 
@@ -388,7 +387,7 @@ The optimal number of clusters was found to be K = 2.
 Cluster 0 represents Casual Users.
 
 Cluster 1 represents Power Users.
-""")
+
     ## Results
     Successfully generated personalized
     recommendations for selected products.
@@ -401,7 +400,5 @@ Cluster 1 represents Power Users.
     • Deep Learning Based Recommenders
     • Real-Time Recommendation Engine
     """)
-    st.subheader("Clustering Results")
-    st.write("""
-
+    # Removed redundant st.subheader and st.write blocks, as the content was already included in the markdown.
     st.success("Project Completed Successfully")
