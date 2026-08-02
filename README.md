@@ -102,5 +102,6 @@ Users can:
  Developed a deployable Streamlit application
 
 ## Author:
-Data Science & Machine Learning Project
-Product Recommendation System
+Divya Shinde
+Aspiring Data Scientist | Python | Machine Learning | Data Analytics
+GitHub: https://github.com/DivyaShindeTech
